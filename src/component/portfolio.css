@@ -88,6 +88,13 @@ button { font-family: inherit; cursor: pointer; }
 .pf-title .line { display: block; }
 .pf-title .muted { color: var(--faint); }
 .pf-title .accent { color: var(--accent); }
+.pf-title .typed { white-space: pre-wrap; }
+.caret {
+  display: inline-block; width: 0.07em; height: 0.85em; margin-left: 0.06em;
+  background: currentColor; border-radius: 2px; vertical-align: -0.06em;
+  animation: pf-blink 1s steps(1) infinite;
+}
+@keyframes pf-blink { 50% { opacity: 0; } }
 .pf-avatar {
   display: inline-flex; align-items: center; justify-content: center;
   width: 1.8em; height: 1.8em; border-radius: 0.5em;
@@ -450,4 +457,5 @@ button { font-family: inherit; cursor: pointer; }
   .pj-car-track { transition: none; }
   .card { animation: none; opacity: 1; transform: none; }
   .pin { animation: none; }
+  .caret { animation: none; }
 }

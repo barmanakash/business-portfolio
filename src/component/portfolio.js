@@ -6,7 +6,7 @@ const DATA = {
   name: "Akash Barman",
   initials: "AB",
   photo: "/projects/akash_photo1.jpeg", // image lives in /public/projects
-  title: "Frontend Developer",
+  title: "FullStack Developer",
   email: "1998akashbarman@gmail.com",
   location: "Jabalpur",
   region: "Madhya Pradesh, India",
@@ -466,6 +466,52 @@ function Header() {
   );
 }
 
+// Phrases typed out (and deleted) in the orange part of the headline
+const TYPED = [
+  "4+ years of React.",
+  "AI Integration Skills.",
+  "AI-Driven Development.",
+  "Intelligent Solutions.",
+  "Digital Innovation.",
+  "Scalable Solutions.",
+  "A Vision to Build.",
+];
+
+function Typewriter({ words }) {
+  const [text, setText] = useState("");
+  const [i, setI] = useState(0);
+  const [deleting, setDeleting] = useState(false);
+  const reduced =
+    typeof window !== "undefined" &&
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  useEffect(() => {
+    if (reduced) return undefined;
+    const word = words[i];
+    let t;
+    if (!deleting && text === word) {
+      t = setTimeout(() => setDeleting(true), 1700); // hold the finished phrase
+    } else if (deleting && text === "") {
+      t = setTimeout(() => { setDeleting(false); setI((n) => (n + 1) % words.length); }, 300);
+    } else {
+      t = setTimeout(
+        () => setText(deleting ? word.slice(0, text.length - 1) : word.slice(0, text.length + 1)),
+        deleting ? 35 : 80
+      );
+    }
+    return () => clearTimeout(t);
+  }, [text, deleting, i, words, reduced]);
+
+  if (reduced) return <span>{words[0]}</span>;
+  return (
+    <span className="typed" aria-label={words.join(", ")}>
+      <span aria-hidden="true">{text}</span>
+      <span className="caret" aria-hidden="true" />
+    </span>
+  );
+}
+
 function Hero() {
   return (
     <section className="pf-hero">
@@ -481,8 +527,7 @@ function Hero() {
           I’m a <span style={{ color: "var(--ink)" }}>{DATA.title}</span> with
         </span>
         <span className="line accent">
-          4+ years of React.
-          <span className="pf-status"><i />Open to work</span>
+          <Typewriter words={TYPED} />
         </span>
       </h1>
       <div className="pf-cta">
