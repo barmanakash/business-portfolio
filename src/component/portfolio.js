@@ -5,13 +5,65 @@ import "./portfolio.css";
 const DATA = {
   name: "Akash Barman",
   initials: "AB",
-  photo: "", // optional: put an image in /public and set e.g. "/akash.jpg"
+  photo: "/projects/akash_photo1.jpeg", // image lives in /public/projects
   title: "Frontend Developer",
   email: "1998akashbarman@gmail.com",
   location: "Jabalpur",
   region: "Madhya Pradesh, India",
-  about:
-    "Frontend Developer with 2+ years of experience specializing in React.js, JavaScript, and TypeScript. Expert in translating Figma designs into scalable, pixel-perfect e-commerce interfaces while actively expanding into backend development to deliver full-stack solutions. Proven track record of optimizing web performance and collaborating with cross-functional teams.",
+  about: {
+    headline: "Full Stack Developer | MERN Stack | AI Integration | AI Voice Agents | WordPress",
+    intro: [
+      "Hi! I’m Akash Barman, a Full Stack Developer from India specializing in MERN Stack Development, AI Integration, AI Voice Agents, and WordPress Development.",
+      "I help businesses, startups, and entrepreneurs turn their ideas into reliable, scalable, and user-friendly digital solutions.",
+    ],
+    servicesTitle: "My Services",
+    services: [
+      {
+        title: "Full Stack Web Development (MERN Stack)",
+        items: [
+          "Custom web application development",
+          "Frontend development using React.js, NextJs, JavaScript, HTML, CSS, and Material UI (MUI)",
+          "Backend development using Python, Node.js and Express.js",
+          "Database design and management using Mysql, PostGres, MongoDB",
+          "Responsive and high-performance web applications",
+          "Motion and animation for interactive web experiences",
+          "Smooth UI animations and transitions",
+        ],
+      },
+      {
+        title: "AI Integration & Automation",
+        items: [
+          "AI-powered feature integration into web applications",
+          "AI chatbots and intelligent assistants",
+          "AI Voice Agents for automated conversations and customer support",
+          "Voice-based AI assistants and conversational automation",
+          "Workflow automation",
+          "AI-powered tools and business solutions",
+        ],
+      },
+      {
+        title: "WordPress Development",
+        items: [
+          "Professional business websites",
+          "Custom WordPress website development",
+          "Responsive website design",
+          "Website customization and maintenance",
+        ],
+      },
+    ],
+    whyTitle: "Why Work With Me?",
+    why: [
+      "Clean, maintainable, and scalable code",
+      "Focus on performance and user experience",
+      "Clear communication and a professional approach",
+      "Commitment to delivering quality solutions",
+      "Focus on understanding your business requirements",
+    ],
+    closing: [
+      "Whether you need a complete web application, AI-powered functionality, an intelligent voice agent, professional WordPress website, I’m ready to help.",
+      "Let’s discuss your project and turn your idea into reality!",
+    ],
+  },
   experience: [
     { role: "Frontend Developer", company: "SVAM International Inc.", period: "Aug 2024 – Mar 2025", place: "Noida" },
     { role: "Associate Professional Software Engineer", company: "DXC Technology", period: "Feb 2022 – May 2023", place: "Bengaluru" },
@@ -126,9 +178,11 @@ const DATA = {
     },
   ],
   skillGroups: [
-    { label: "Languages", items: ["JavaScript (ES6+)", "TypeScript", "HTML5", "CSS3"] },
-    { label: "Frontend", items: ["React.js", "Next.js", "Redux Toolkit", "Material UI", "Tailwind CSS"] },
-    { label: "Backend & DB", items: ["Node.js", "Express.js", "MongoDB", "Firebase", "Supabase"] },
+    { label: "Languages", items: ["JavaScript (ES6+)", "TypeScript", "Python", "HTML5", "CSS3"] },
+    { label: "Frontend", items: ["React.js", "Next.js", "Redux Toolkit", "Material UI", "Tailwind CSS", "Animations & motion"] },
+    { label: "Backend & DB", items: ["Node.js", "Express.js", "MongoDB", "MySQL", "PostgreSQL", "Firebase", "Supabase"] },
+    { label: "AI & Automation", items: ["AI integration", "AI chatbots", "AI voice agents", "Workflow automation"] },
+    { label: "WordPress", items: ["Custom websites", "Responsive design", "Customization & maintenance"] },
     { label: "Tools", items: ["Socket.io", "RESTful APIs", "Git / GitLab", "Webpack", "Vite"] },
   ],
   coverSkills: ["React.js", "TypeScript", "Next.js", "Redux"],
@@ -153,7 +207,6 @@ DATA.projects.forEach((p) => {
 });
 
 const NAV = [
-  ["Experience", "#experience"],
   ["Projects", "#projects"],
   ["Skills", "#skills"],
   ["About", "#about"],
@@ -294,10 +347,7 @@ function ProjectPage({ project }) {
 
   return (
     <div className="pf">
-      <header className="pf-header">
-        <a className="pj-back" href="#projects">← Back to portfolio</a>
-        <div className="pf-brand"><Logo /></div>
-      </header>
+      <Header />
 
       <section className="pj-hero" style={{ background: `linear-gradient(145deg, ${project.from}, ${project.to})` }}>
         <small>0{i + 1} / 0{n}</small>
@@ -399,37 +449,19 @@ export default function Portfolio() {
   return project ? <ProjectPage key={slug} project={project} /> : <Home />;
 }
 
-function Logo() {
-  return (
-    <span className="pf-logo">
-      <svg viewBox="0 0 34 34" fill="none" stroke="#0b0b0b" strokeWidth="2.4" strokeLinejoin="round" strokeLinecap="round">
-        <path d="M17 6c1.2 0 2.2.6 2.8 1.6l9 15.2c1.2 2-.2 4.5-2.6 4.5H7.8c-2.4 0-3.8-2.5-2.6-4.5l9-15.2C14.8 6.6 15.8 6 17 6z" />
-      </svg>
-      <i />
-    </span>
-  );
-}
-
 function Header() {
-  const [open, setOpen] = useState(false);
   return (
-    <header className="pf-header">
-      <div className="pf-brand">
-        <Logo />
-        <a className="pf-mail" href={`mailto:${DATA.email}`}>{DATA.email}</a>
-      </div>
-      <button className="pf-menu-btn" aria-label="Menu" aria-expanded={open} onClick={() => setOpen(!open)}>
-        <svg viewBox="0 0 16 16" fill="none" stroke="#0b0b0b" strokeWidth="1.6" strokeLinecap="round">
-          <path d="M2 4h12M4 8h8M6 12h4" />
-        </svg>
-      </button>
-      {open && (
-        <nav className="pf-menu">
+    <header className="pf-nav-wrap">
+      <nav className="pf-nav" aria-label="Main">
+        <a className="pf-nav-logo" href="#top" aria-label="Back to top">
+          <img src="/projects/akash_photo1.jpeg" alt={DATA.name} />
+        </a>
+        <ul className="pf-nav-links">
           {NAV.map(([label, href]) => (
-            <a key={label} href={href} onClick={() => setOpen(false)}>{label}</a>
+            <li key={label}><a href={href}>{label}</a></li>
           ))}
-        </nav>
-      )}
+        </ul>
+      </nav>
     </header>
   );
 }
@@ -449,7 +481,7 @@ function Hero() {
           I’m a <span style={{ color: "var(--ink)" }}>{DATA.title}</span> with
         </span>
         <span className="line accent">
-          2+ years of React.
+          4+ years of React.
           <span className="pf-status"><i />Open to work</span>
         </span>
       </h1>
@@ -461,37 +493,15 @@ function Hero() {
   );
 }
 
-function ExperienceCard() {
-  // newest first in data; show oldest → newest so the faded top item is the oldest
-  const items = [...DATA.experience].reverse();
-  return (
-    <div className="card" id="experience" style={{ "--d": 1 }}>
-      <span className="tag">My Experience</span>
-      <div className="tl">
-        {items.map((e) => (
-          <div className="tl-item" key={e.company}>
-            <b>{e.role} at {e.company.split(" ")[0]}</b>
-            <span>{e.period} · {e.place}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 function ProjectsCard() {
   const [active, setActive] = useState(0);
-  const [hover, setHover] = useState(false);
-  const timer = useRef(null);
-  const show = () => { clearTimeout(timer.current); setHover(true); };
-  const hide = () => { clearTimeout(timer.current); timer.current = setTimeout(() => setHover(false), 150); };
-  useEffect(() => () => clearTimeout(timer.current), []);
   const n = DATA.projects.length;
   const next = () => setActive((a) => (a + 1) % n);
   const cur = DATA.projects[active];
   return (
-    <div className="card projects-card" id="projects" style={{ "--d": 2 }}>
+    <div className="card projects-card span-2" id="projects" style={{ "--d": 2 }}>
       <span className="tag">My Projects</span>
+      <div className="projects-body">
       <div className="stack-wrap">
         {DATA.projects.map((p, i) => {
           const pos = (i - active + n) % n;
@@ -502,10 +512,6 @@ function ProjectsCard() {
               key={p.name}
               className="stack-card"
               onClick={next}
-              onMouseEnter={show}
-              onMouseLeave={hide}
-              onFocus={show}
-              onBlur={hide}
               aria-label={`Show next project (current: ${cur.name})`}
               style={{
                 backgroundImage: thumb
@@ -524,20 +530,20 @@ function ProjectsCard() {
             </button>
           );
         })}
-        <div className={`project-pop ${hover ? "show" : ""}`} role="tooltip" aria-hidden={!hover} onMouseEnter={show} onMouseLeave={hide}>
-          <small>0{active + 1} / 0{n}</small>
-          <b>{cur.name}</b>
-          <p>{cur.details || cur.desc}</p>
+      </div>
+      <div className="proj-detail">
+        <small>0{active + 1} / 0{n}</small>
+        <h3>{cur.name}</h3>
+        <p className="proj-desc">{cur.desc}</p>
+        <p className="proj-more">{cur.details}</p>
+        <div className="proj-actions">
           <a className="pop-link" href={`#/project/${cur.slug}`}>View project details →</a>
           <span>Click the card to see the next project</span>
         </div>
+        <div className="stack-dots">
+          {DATA.projects.map((p, i) => <i key={p.name} className={i === active ? "on" : ""} />)}
+        </div>
       </div>
-      <div className="stack-info">
-        <b>{cur.name}</b>
-        <span>{cur.desc}</span>
-      </div>
-      <div className="stack-dots">
-        {DATA.projects.map((p, i) => <i key={p.name} className={i === active ? "on" : ""} />)}
       </div>
     </div>
   );
@@ -545,7 +551,7 @@ function ProjectsCard() {
 
 function SkillsCard() {
   return (
-    <div className="card skills-card" id="skills" style={{ "--d": 3 }}>
+    <div className="card skills-card" style={{ "--d": 3 }}>
       <span className="tag">What I’m using</span>
       <div className="cover">
         <h3>Tech<br />Stack</h3>
@@ -560,39 +566,11 @@ function SkillsCard() {
   );
 }
 
-function MapCard() {
-  return (
-    <div className="card map-card" style={{ "--d": 4 }}>
-      <span className="tag">Map</span>
-      <svg viewBox="0 0 300 270" preserveAspectRatio="xMidYMid slice" fill="none" stroke="#d6d6d6" strokeWidth="1">
-        <path d="M-10 60 C60 40 120 90 200 70 S300 40 320 60" />
-        <path d="M-10 110 C50 100 110 150 190 130 S290 110 320 130" />
-        <path d="M-10 170 C70 150 130 200 210 185 S290 160 320 175" />
-        <path d="M40 -10 C60 60 30 120 60 190 S50 260 70 290" />
-        <path d="M110 -10 C130 50 100 110 130 180 S120 250 140 290" />
-        <path d="M185 -10 C200 60 170 120 200 180 S195 250 215 290" />
-        <path d="M250 -10 C265 50 240 120 265 190 S255 250 275 290" />
-        <path d="M-10 220 L320 200" />
-        <path d="M-10 30 L320 20" />
-        <path d="M20 90 L280 150" />
-        <path d="M30 150 L250 60" />
-        <circle cx="156" cy="112" r="46" stroke="#e4e4e4" />
-        <circle cx="156" cy="112" r="86" stroke="#eeeeee" />
-      </svg>
-      <div className="pin" />
-      <div className="map-label">
-        <b>{DATA.location.toUpperCase()}</b>
-        <span>{DATA.region.toUpperCase()}</span>
-      </div>
-    </div>
-  );
-}
-
 function WorkCard() {
   const [step, setStep] = useState(0);
   const s = DATA.steps[step];
   return (
-    <div className="card work span-2" style={{ "--d": 5 }}>
+    <div className="card work span-3" style={{ "--d": 5 }}>
       <span className="tag">How I work</span>
       <h3>0{step + 1} {s.title}</h3>
       <p>{s.text}</p>
@@ -614,26 +592,53 @@ function WorkCard() {
 }
 
 function AboutCard() {
+  const a = DATA.about;
   return (
-    <div className="card about span-2" id="about" style={{ "--d": 6 }}>
+    <div className="card about about-full span-3" id="about" style={{ "--d": 6 }}>
       <span className="tag">About me</span>
-      <p>{DATA.about}</p>
+      <h3 className="about-headline">{a.headline}</h3>
+      {a.intro.map((t) => <p key={t}>{t}</p>)}
+
+      <h4 className="about-sub">{a.servicesTitle}</h4>
+      <div className="about-services">
+        {a.services.map((s, i) => (
+          <div className="about-service" key={s.title}>
+            <b><i>0{i + 1}</i>{s.title}</b>
+            <ul className="pj-list">
+              {s.items.map((it) => <li key={it}>{it}</li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      <h4 className="about-sub">{a.whyTitle}</h4>
       <div className="chips">
-        {DATA.skillGroups.flatMap((g) => g.items).slice(0, 12).map((s) => <span key={s}>{s}</span>)}
+        {a.why.map((w) => <span key={w}>{w}</span>)}
+      </div>
+
+      <div className="about-closing">
+        {a.closing.map((t, i) => (
+          i === a.closing.length - 1 ? <strong key={t}>{t}</strong> : <p key={t}>{t}</p>
+        ))}
       </div>
     </div>
   );
 }
 
-function EducationCard() {
-  const e = DATA.education;
+function SkillsSection() {
   return (
-    <div className="card edu" style={{ "--d": 7 }}>
-      <span className="tag">Education</span>
-      <h4>{e.degree}</h4>
-      <p>{e.institution}</p>
-      <p>{e.year}</p>
-      <em>{e.note}</em>
+    <div className="card skills-full span-3" id="skills" style={{ "--d": 7 }}>
+      <span className="tag">Skills</span>
+      <div className="skills-cols">
+        {DATA.skillGroups.map((g) => (
+          <div className="skills-col" key={g.label}>
+            <h4>{g.label}</h4>
+            <div className="chips">
+              {g.items.map((s) => <span key={s}>{s}</span>)}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -653,17 +658,15 @@ function ContactCard() {
 // ─── MAIN ────────────────────────────────────────────────────────────────────
 function Home() {
   return (
-    <div className="pf">
+    <div className="pf" id="top">
       <Header />
       <Hero />
       <main className="pf-grid">
-        <ExperienceCard />
         <ProjectsCard />
         <SkillsCard />
-        <MapCard />
         <WorkCard />
+        <SkillsSection />
         <AboutCard />
-        <EducationCard />
         <ContactCard />
       </main>
       <p className="pf-foot">Designed & built by {DATA.name} · {new Date().getFullYear()}</p>
