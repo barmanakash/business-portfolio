@@ -75,11 +75,55 @@ const DATA = {
       from: "#12b886",
       to: "#064e3b",
     },
-    { name: "Zoom Notary", desc: "Remote online notarization platform", from: "#ff8a3d", to: "#e2510a" },
-    { name: "Funds Man", desc: "Investment & funds management dashboard", from: "#3d5afe", to: "#1a237e" },
-    { name: "Etho Suit", desc: "Enterprise business suite application", from: "#26c6a2", to: "#00695c" },
-    { name: "Tour Guide", desc: "Interactive travel guidance platform", from: "#ab47bc", to: "#4a148c" },
-    { name: "Service Internal", desc: "Internal service management tool", from: "#455a64", to: "#111c22" },
+    {
+      name: "Khana",
+      desc: "Restaurant website with a menu showcase and table booking",
+      details: "Restaurant website with a categorised menu of dish cards, order buttons and a Book a table call to action.",
+      overview:
+        "Khana is a restaurant website with a fresh green look. The navigation bar links to Home, About, Menu, Event and Visit us, with a Book a table button always within reach. This screenshot shows the menu section, titled “Try Our Specialities”, where visitors browse by category and see each dish as a card with a round plate photo, its price, a favourite heart and an Order Now button, with a More Recipes link at the end of the grid.",
+      features: [
+        "Green navigation bar with Home, About, Menu, Event and Visit us links and a Book a table button",
+        "Menu section with category tabs for starters, dishes, desserts and drinks, each with a line icon",
+        "Dish cards with a round plate photo in a green ring, the dish name and a price tag",
+        "Favourite heart on every dish card",
+        "Order Now button on every dish",
+        "More Recipes link with an arrow below the grid",
+        "Soft light-blue background with a faint hand-drawn food pattern",
+      ],
+      images: [
+        {
+          src: "/projects/Khana-resto-middile.png",
+          alt: "Khana restaurant website menu section with category tabs and dish cards",
+        },
+      ],
+      from: "#7ac05a",
+      to: "#2e6b1f",
+    },
+    {
+      name: "Meeting Scheduler",
+      desc: "Meeting management dashboard with reports and availability settings",
+      details: "Dashboard for scheduling and tracking meetings, with attendance reports, Excel and PDF export, and working-hours settings.",
+      overview:
+        "Meeting Scheduler is a dashboard for scheduling and tracking meetings, shown here with a teacher account. A deep indigo sidebar links Dashboard, Meetings, Reports, Availability and Profile. The dashboard summarises total, upcoming, completed and cancelled meetings along with an overall attendance rate. The Meetings page lists every meeting as a card with search and status filters, Reports & Analytics adds date filters, charts and Excel or PDF export, and Availability Settings lets the user set working hours, working days, holidays and blocked time slots.",
+      features: [
+        "Deep indigo sidebar with Dashboard, Meetings, Reports, Availability and Profile, plus a user card with a role badge and Logout",
+        "Dashboard stat cards for total, upcoming, completed and cancelled meetings, with an overall attendance rate bar",
+        "Today’s Meetings and Upcoming Meetings panels with friendly empty states",
+        "Meetings page with search and All, Scheduled, Completed, Cancelled and Rescheduled filters",
+        "Meeting cards showing type, status, date and time, participants, and Join Meet and Cancel actions",
+        "Reports & Analytics with a date range filter, summary stats, an attendance pie chart and a meetings-by-type bar chart",
+        "Excel and PDF export buttons on the reports page",
+        "Availability settings for working hours, working days, holidays and blocked time slots",
+      ],
+      images: [
+        { src: "/projects/saas1.png", title: "Dashboard", alt: "Meeting Scheduler dashboard with meeting stats and attendance rate" },
+        { src: "/projects/saas2.png", title: "Meetings", alt: "Meeting Scheduler meetings page with search, filters and meeting cards" },
+        { src: "/projects/saas3.png", title: "Reports & Analytics", alt: "Meeting Scheduler reports page with attendance and meeting type charts" },
+        { src: "/projects/saas4.png", title: "Availability Settings", alt: "Meeting Scheduler availability settings with working hours and days" },
+      ],
+      from: "#4f46e5",
+      to: "#1e1b6e",
+    },
   ],
   skillGroups: [
     { label: "Languages", items: ["JavaScript (ES6+)", "TypeScript", "HTML5", "CSS3"] },
@@ -155,6 +199,88 @@ function Shot({ src, alt, caption }) {
   );
 }
 
+function SlideImg({ src, alt, eager }) {
+  const [ok, setOk] = useState(true);
+  if (!ok) {
+    if (process.env.NODE_ENV === "production") return null;
+    return (
+      <div className="pj-missing">
+        <span>Screenshot not found.<br />Save the image as <code>public{src}</code> and refresh.</span>
+      </div>
+    );
+  }
+  return (
+    <img
+      src={src}
+      alt={alt}
+      draggable="false"
+      loading={eager ? "eager" : "lazy"}
+      onError={() => { console.warn(`Project image not found: ${src}`); setOk(false); }}
+    />
+  );
+}
+
+function Carousel({ images, name }) {
+  const [i, setI] = useState(0);
+  const startX = useRef(null);
+  const n = images.length;
+  const go = (d) => setI((c) => (c + d + n) % n);
+  const cur = images[i];
+
+  return (
+    <div
+      className="pj-car"
+      tabIndex={0}
+      role="region"
+      aria-roledescription="carousel"
+      aria-label={`${name} screenshots`}
+      onKeyDown={(e) => {
+        if (e.key === "ArrowLeft") go(-1);
+        if (e.key === "ArrowRight") go(1);
+      }}
+    >
+      <div
+        className="pj-car-view"
+        onPointerDown={(e) => { startX.current = e.clientX; }}
+        onPointerUp={(e) => {
+          if (startX.current === null) return;
+          const dx = e.clientX - startX.current;
+          startX.current = null;
+          if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1); // swipe
+        }}
+        onPointerCancel={() => { startX.current = null; }}
+      >
+        <div className="pj-car-track" style={{ transform: `translateX(-${i * 100}%)` }}>
+          {images.map((im, idx) => (
+            <div className="pj-car-slide" key={im.src} aria-hidden={idx !== i}>
+              <SlideImg src={im.src} alt={im.alt || `${name} screenshot ${idx + 1}`} eager={idx === 0} />
+            </div>
+          ))}
+        </div>
+        <button type="button" className="pj-car-btn prev" aria-label="Previous screenshot" onClick={() => go(-1)}>‹</button>
+        <button type="button" className="pj-car-btn next" aria-label="Next screenshot" onClick={() => go(1)}>›</button>
+      </div>
+
+      <div className="pj-car-bar">
+        <span className="pj-car-title">{cur.title || `Screenshot ${i + 1}`}</span>
+        <div className="pj-car-dots">
+          {images.map((im, idx) => (
+            <button
+              type="button"
+              key={im.src}
+              className={idx === i ? "on" : ""}
+              aria-label={`Go to screenshot ${idx + 1}`}
+              aria-current={idx === i}
+              onClick={() => setI(idx)}
+            />
+          ))}
+        </div>
+        <span className="pj-car-count">{i + 1} / {n}</span>
+      </div>
+    </div>
+  );
+}
+
 function ProjectPage({ project }) {
   const list = DATA.projects;
   const n = list.length;
@@ -200,11 +326,15 @@ function ProjectPage({ project }) {
         {images.length > 0 && (
           <div className="card wide" style={{ "--d": 1 }}>
             <span className="tag">Screenshots</span>
-            <div className="pj-gallery">
-              {images.map((im) => (
-                <Shot key={im.src} src={im.src} alt={im.alt || `${project.name} screenshot`} caption={im.caption} />
-              ))}
-            </div>
+            {images.length > 1 ? (
+              <Carousel images={images} name={project.name} />
+            ) : (
+              <div className="pj-gallery">
+                {images.map((im) => (
+                  <Shot key={im.src} src={im.src} alt={im.alt || `${project.name} screenshot`} caption={im.caption} />
+                ))}
+              </div>
+            )}
           </div>
         )}
 
